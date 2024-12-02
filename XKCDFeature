@@ -1,0 +1,6 @@
+Feature: XKCD
+
+  Scenario: Retrieve the latest comic metadata
+    Given the XKCD API is available
+    When I send a GET request to "/info.0.json" endpoint
+    Then for GET the response status code should be 200
