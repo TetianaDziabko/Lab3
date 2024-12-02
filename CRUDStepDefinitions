@@ -1,0 +1,146 @@
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
+using RestSharp;
+using System;
+using TechTalk.SpecFlow;
+
+namespace SpecFlowProject3.StepDefinitions
+{
+    [Binding]
+    public class CRUDStepDefinitions
+    {
+        private RestClient client = new RestClient("https://restful-booker.herokuapp.com");
+        private RestRequest request;
+        private RestResponse response;
+
+        private int IdUpdate = 301;
+        private int IdDelete = 969;
+
+        //GET
+        [Given(@"I have a valid booking ID for GET")]
+        public void GivenIHaveAValidBookingIDForGET()
+        {
+            client = new RestClient("https://restful-booker.herokuapp.com");
+            request = new RestRequest("/booking", Method.GET);
+        }
+
+        [When(@"I send a GET request to the ""([^""]*)"" endpoint")]
+        public void WhenISendAGETRequestToTheEndpoint(string p0)
+        {
+            response = (RestResponse)client.Execute(request);
+        }
+
+        [Then(@"the response status code for GET should be (.*)")]
+        public void ThenTheResponseStatusCodeForGETShouldBe(int status)
+        {
+            Assert.IsNotNull(response, "Response is null");
+            Assert.AreEqual(status, (int)response.StatusCode);
+        }
+
+        //POST
+        [Given(@"I have a valid booking information")]
+        public void GivenIHaveAValidBookingInformation()
+        {
+            request = new RestRequest("/booking", Method.POST);
+            request.AddJsonBody(new
+            {
+                firstname = "Fred",
+                lastname = "New",
+                totalprice = 376,
+                depositpaid = true,
+                bookingdates = new
+                {
+                    checkin = "2024-11-01",
+                    checkout = "2024-11-10"
+                },
+                additionalneeds = "Breakfast"
+            });
+
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Accept", "application/json");
+        }
+
+        [When(@"I send a POST request to the ""([^""]*)"" endpoint")]
+        public void WhenISendAPOSTRequestToTheEndpoint(string p0)
+        {
+            response = (RestResponse)client.Execute(request);
+        }
+
+        [Then(@"the response status code for POST should be (.*)")]
+        public void ThenTheResponseStatusCodeForPOSTShouldBe(int status)
+        {
+            Assert.IsNotNull(response, "Response is null");
+            Assert.AreEqual(status, (int)response.StatusCode);
+        }
+
+        //PUT
+        [Given(@"I have a valid ID for update")]
+        public void GivenIHaveAValidIDForUpdate()
+        {
+            client = new RestClient("https://restful-booker.herokuapp.com");
+            Assert.IsNotNull(IdUpdate, "Booking ID should not be null");
+
+            request = new RestRequest($"/booking/{IdUpdate}", Method.PUT);
+
+            request.AddHeader("Content-Type", "application/json");
+            request.AddHeader("Accept", "application/json");
+            request.AddHeader("Authorization", "Basic YWRtaW46cGFzc3dvcmQxMjM=");
+        }
+
+        [Given(@"I have an updated booking information")]
+        public void GivenIHaveAnUpdatedBookingInformation()
+        {
+            request.AddJsonBody(new
+            {
+                firstname = "Will",
+                lastname = "Old",
+                totalprice = 333,
+                depositpaid = true,
+                bookingdates = new
+                {
+                    checkin = "2024-12-01",
+                    checkout = "2024-12-10"
+                },
+                additionalneeds = "Breakfast"
+            });
+        }
+
+
+        [When(@"I send a PUT request to the ""([^""]*)"" endpoint")]
+        public void WhenISendAPUTRequestToTheEndpoint(string p0)
+        {
+            response = (RestResponse)client.Execute(request);
+        }
+
+        [Then(@"the response status code for PUT should be (.*)")]
+        public void ThenTheResponseStatusCodeForPUTShouldBe(int status)
+        {
+            Assert.IsNotNull(response, "Response is null");
+            Assert.AreEqual(status, (int)response.StatusCode);
+        }
+
+        //DELETE
+        [Given(@"I have a valid ID for delete")]
+        public void GivenIHaveAValidIDForDelete()
+        {
+            client = new RestClient("https://restful-booker.herokuapp.com");
+            Assert.IsNotNull(IdDelete, "Booking ID should not be null");
+
+            request = new RestRequest($"/booking/{IdDelete}", Method.DELETE);
+            request.AddHeader("Authorization", "Basic YWRtaW46cGFzc3dvcmQxMjM=");
+        }
+
+        [When(@"I send a DELETE request to the ""([^""]*)"" endpoint")]
+        public void WhenISendADELETERequestToTheEndpoint(string p0)
+        {
+            response = (RestResponse)client.Execute(request);
+        }
+
+        [Then(@"the response status code for DELETE should be (.*)")]
+        public void ThenTheResponseStatusCodeForDELETEShouldBe(int status)
+        {
+            Assert.IsNotNull(response, "Response is null");
+            Assert.AreEqual(status, (int)response.StatusCode);
+        }
+
+    }
+}
