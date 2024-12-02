@@ -12,8 +12,8 @@ namespace SpecFlowProject3.StepDefinitions
         private RestRequest request;
         private RestResponse response;
 
-        private int IdUpdate = 301;
-        private int IdDelete = 969;
+        private int IdUpdate = 701;
+        private int IdDelete = 4077;
 
         //GET
         [Given(@"I have a valid booking ID for GET")]
@@ -103,7 +103,6 @@ namespace SpecFlowProject3.StepDefinitions
                 additionalneeds = "Breakfast"
             });
         }
-
 
         [When(@"I send a PUT request to the ""([^""]*)"" endpoint")]
         public void WhenISendAPUTRequestToTheEndpoint(string p0)
