@@ -1,0 +1,34 @@
+using RestSharp;
+using System;
+using TechTalk.SpecFlow;
+
+namespace SpecFlowProject3.StepDefinitions
+{
+    [Binding]
+    public class XKCDStepDefinitions
+    {
+        private RestClient client = new RestClient("https://xkcd.com");
+        private RestRequest request;
+        private RestResponse response;
+
+        [Given(@"the XKCD API is available")]
+        public void GivenTheXKCDAPIIsAvailable()
+        {
+            client = new RestClient("https://xkcd.com");
+            request = new RestRequest("/info.0.json", Method.GET);
+        }
+
+        [When(@"I send a GET request to ""([^""]*)"" endpoint")]
+        public void WhenISendAGETRequestToEndpoint(string p0)
+        {
+            response = (RestResponse)client.Execute(request);
+        }
+
+        [Then(@"for GET the response status code should be (.*)")]
+        public void ThenForGETTheResponseStatusCodeShouldBe(int status)
+        {
+            Assert.IsNotNull(response, "Response is null");
+            Assert.AreEqual(status, (int)response.StatusCode);
+        }
+    }
+}
